@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700&display=swap')
+
+body
+	font-family: "Manrope ExtraLight", sans-serif
+	color: white
+	margin: 0
+	height: 100vh
+
+	@supports (height: 100dvh)
+		height: 100dvh
+
+#main
+	height: 100%
+	display: grid
+	text-align: center
+	grid-template-rows: repeat(3, 1fr)
+	align-items: stretch
+
+	&.setup
+		background-color: #444
+
+	&.timing
+		background-color: #008a31
+
+	&.paused
+		background-color: #00848f
+
+	& > *
+		display: flex
+		flex-direction: column
+		align-items: center
+		justify-content: center
+
+	button
+		width: 70%
+		height: 70%
+		font-size: 2rem
+
+#setup-form
+	display: none
+	.setup &
+		display: grid
+
+	align-self: center
+	grid-template-columns: repeat(2, auto)
+	gap: 1rem
+
+	p
+		grid-column-end: span 2
+
+	label
+		text-align: right
+
+#setuphead
+	display: none
+	.setup &
+		display: unset
+
+#timinghead
+	display: none
+	.timing &
+		display: unset
+
+#pausehead
+	display: none
+	.paused &
+		display: unset
+
+#maintimer
+	.setup &
+		display: none
+
+	font-size: 5rem

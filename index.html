@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSST</title>
+  </head>
+  <body>
+    <div id="main">
+      <div>
+        <h1>SSST</h1>
+        <h2 id="setuphead">Setup</h2>
+        <div id="timinghead">
+          <h2>Stretching</h2>
+          <p>You've stretched <span id="timingsofar1"></span> this session</p>
+          <p id="keepstretching"></p>
+          <p id="stretchgoal"></p>
+        </div>
+        <div id="pausehead">
+          <h2>Resting</h2>
+          <p>You've stretched <span id="timingsofar2"></span> this session</p>
+          <p>You have <span id="goalremaining"></span> left this session</p>
+          <p>You've been resting for...</p>
+        </div>
+      </div>
+
+      <div id="setup-form">
+        <p>
+          Keep in mind these are only a guide,<br/>
+          you can ignore the guides if you want
+        </p>
+
+        <label>Stretching time guide</label>
+        <select id="stselect">
+          <option value="10">10 seconds</option>
+          <option value="20">20 seconds</option>
+          <option value="30">30 seconds</option>
+          <option value="40">40 seconds</option>
+        </select>
+        <label>Full time guide</label>
+        <select id="ftselect">
+          <option value="60">1 minute</option>
+          <option value="120">2 minutes</option>
+          <option value="180">3 minutes</option>
+          <option value="300">5 minutes</option>
+          <option value="420">7 minutes</option>
+          <option value="600">10 minutes</option>
+        </select>
+      </div>
+
+      <div id="maintimer"></div>
+
+      <div><button id="btn"></button></div>
+    </div>
+
+    <script type="module" src="/src/index.ts"></script>
+  </body>
+</html>
