@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700&display=swap')
 
+[x-cloak]
+	display: none !important
+
 body
 	font-family: "Manrope ExtraLight", sans-serif
 	color: white
@@ -10,7 +13,8 @@ body
 		height: 100dvh
 
 #main
-	height: 100%
+	height: calc(100% - 4rem)
+	padding: 2rem
 	display: grid
 	text-align: center
 	grid-template-rows: repeat(3, 1fr)
@@ -51,23 +55,9 @@ body
 	label
 		text-align: right
 
-#setuphead
-	display: none
-	.setup &
-		display: unset
-
-#timinghead
-	display: none
-	.timing &
-		display: unset
-
-#pausehead
-	display: none
-	.paused &
-		display: unset
-
 #maintimer
 	.setup &
 		display: none
 
 	font-size: 5rem
+	grid-row-end: span 2

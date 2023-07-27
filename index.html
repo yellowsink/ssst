@@ -4,41 +4,130 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SSST</title>
+    <link rel="stylesheet" href="/styles.sass" />
   </head>
   <body>
-    <div id="main">
+    <script defer>
+      function formatDuration(ms) {
+        return `${~~(ms / (1000 * 60))}:${(~~((ms / 1000) % 60))
+                .toString()
+                .padStart(2, "0")}`;
+      }
+
+      document.addEventListener("alpine:init", () => Alpine.data("timer", function () {
+        return {
+          state: "setup",
+          stretchTime: this.$persist(30),
+          pauseTime: this.$persist(10),
+          sessionTime: this.$persist(300),
+
+          stretchedSoFar: 0,
+          timerStart: -1,
+
+          interval: undefined,
+
+          // access this to subscribe to a RAF!
+          tick: 0,
+
+          start() {
+            this.state = "timing";
+            this.timerStart = performance.now();
+
+            if (this.interval === undefined)
+              this.interval = setInterval(() => {
+                const soFar = performance.now() - this.timerStart;
+                if (this.state === "timing" && soFar > (this.stretchTime * 1000))
+                  this.pause();
+                else if (this.state === "paused" && soFar > (this.pauseTime * 1000))
+                  this.start();
+              }, 1000);
+          },
+
+          pause() {
+            const now = performance.now();
+            this.state = "paused";
+            this.stretchedSoFar += now - this.timerStart;
+            this.timerStart = now;
+          },
+
+          totalStretched() {
+            const sinceLastStart = this.state === "timing" ? performance.now() - this.timerStart : 0;
+            return this.stretchedSoFar + sinceLastStart;
+          },
+
+          sessionLeft() {
+            return this.sessionTime * 1000 - this.totalStretched();
+          },
+
+          prettyCurrent() {
+            this.tick;
+            return formatDuration(performance.now() - this.timerStart);
+          },
+
+          prettyTotal() {
+            this.tick;
+            return formatDuration(this.totalStretched());
+          },
+
+          prettyCountdown() {
+            this.tick;
+            const goal = this.state === "timing" ? this.stretchTime * 1000 : this.pauseTime * 1000;
+            return formatDuration(goal - (performance.now() - this.timerStart));
+          },
+
+          prettySessionLeft() {
+            this.tick;
+            const left = this.sessionLeft();
+            return formatDuration(Math.abs(left)) + (left < 0 ? " over your goal!" : " left");
+          },
+
+          init() {
+            const loop = () => {
+              requestAnimationFrame(loop);
+              this.tick = ~this.tick;
+            };
+            loop();
+          }
+        };
+      }));
+    </script>
+
+    <script src="//unpkg.com/@alpinejs/persist" defer></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+
+    <div id="main" x-data="timer" :class="state" class="setup">
       <div>
         <h1>SSST</h1>
-        <h2 id="setuphead">Setup</h2>
-        <div id="timinghead">
-          <h2>Stretching</h2>
-          <p>You've stretched <span id="timingsofar1"></span> this session</p>
-          <p id="keepstretching"></p>
-          <p id="stretchgoal"></p>
-        </div>
-        <div id="pausehead">
-          <h2>Resting</h2>
-          <p>You've stretched <span id="timingsofar2"></span> this session</p>
-          <p>You have <span id="goalremaining"></span> left this session</p>
-          <p>You've been resting for...</p>
+        <h2 x-show="state === 'setup'">Setup</h2>
+        <div x-show="state !== 'setup'" x-cloak>
+          <h2 x-text="state === 'timing' ? 'Stretching' : 'Resting'"></h2>
+
+          <p>
+            You've stretched <span x-text="prettyTotal()"></span> this session
+            (<span x-text="prettySessionLeft()"></span>)
+          </p>
+
+          <p x-show="state === 'timing'">Keep going for <span x-text="prettyCountdown()"></span>...</p>
+          <p x-show="state === 'paused'">You've been resting for...</p>
         </div>
       </div>
 
-      <div id="setup-form">
-        <p>
-          Keep in mind these are only a guide,<br />
-          you can ignore the guides if you want
-        </p>
-
-        <label>Stretching time guide</label>
-        <select id="stselect">
+      <div id="setup-form" x-show="state === 'setup'">
+        <label for="stselect">Stretching time</label>
+        <select id="stselect" x-model.number="stretchTime">
           <option value="10">10 seconds</option>
           <option value="20">20 seconds</option>
           <option value="30">30 seconds</option>
           <option value="40">40 seconds</option>
         </select>
-        <label>Full time guide</label>
-        <select id="ftselect">
+        <label for="rtselect">Rest time</label>
+        <select id="rtselect" x-model.number="pauseTime">
+          <option value="5">5 seconds</option>
+          <option value="10">10 seconds</option>
+          <option value="20">20 seconds</option>
+        </select>
+        <label for="ftselect">Full time</label>
+        <select id="ftselect" x-model.number="sessionTime">
           <option value="60">1 minute</option>
           <option value="120">2 minutes</option>
           <option value="180">3 minutes</option>
@@ -48,13 +137,11 @@
         </select>
       </div>
 
-      <div id="maintimer"></div>
+      <div x-show="state === 'setup'">
+        <button id="btn" @click="start">Start!</button>
+      </div>
 
-      <div><button id="btn"></button></div>
+      <div id="maintimer" x-show="state !== 'setup'" x-cloak x-text="prettyCurrent()"></div>
     </div>
-
-    <!-- i sure do love primarily targeting ios 14 -->
-    <script>Array.prototype.at??=function(i){return this[i<0?i+this.length:i]}</script>
-    <script type="module" src="/src/index.ts"></script>
   </body>
 </html>

@@ -1,21 +1,18 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@uwu/iota':
-    specifier: ^1.0.2
-    version: 1.0.2
+  alpinejs:
+    specifier: ^3.12.3
+    version: 3.12.3
 
 devDependencies:
   sass:
     specifier: ^1.63.6
     version: 1.63.6
-  typescript:
-    specifier: ^5.0.2
-    version: 5.1.6
   vite:
     specifier: ^4.3.9
     version: 4.3.9(sass@1.63.6)
@@ -220,8 +217,20 @@ packages:
     dev: true
     optional: true
 
-  /@uwu/iota@1.0.2:
-    resolution: {integrity: sha512-f0/hRF06oEGmrRtZv+Vog1rMiaXok92i+KPHtHY1atro0/jRKzO9O6APQbqLWhzJvosB9Hqjnp0VOsfWW/W4zQ==}
+  /@vue/reactivity@3.1.5:
+    resolution: {integrity: sha512-1tdfLmNjWG6t/CsPldh+foumYFo3cpyCHgBYQ34ylaMsJ+SNHQ1kApMIa8jN+i593zQuaw3AdWH0nJTARzCFhg==}
+    dependencies:
+      '@vue/shared': 3.1.5
+    dev: false
+
+  /@vue/shared@3.1.5:
+    resolution: {integrity: sha512-oJ4F3TnvpXaQwZJNF3ZK+kLPHKarDmJjJ6jyzVNDKH9md1dptjC7lWR//jrGuLdek/U6iltWxqAnYOu8gCiOvA==}
+    dev: false
+
+  /alpinejs@3.12.3:
+    resolution: {integrity: sha512-fLz2dfYQ3xCk7Ip8LiIpV2W+9brUyex2TAE7Z0BCvZdUDklJE+n+a8gCgLWzfZ0GzZNZu7HUP8Z0z6Xbm6fsSA==}
+    dependencies:
+      '@vue/reactivity': 3.1.5
     dev: false
 
   /anymatch@3.1.3:
@@ -403,12 +412,6 @@ packages:
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
-    dev: true
-
-  /typescript@5.1.6:
-    resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
-    engines: {node: '>=14.17'}
-    hasBin: true
     dev: true
 
   /vite@4.3.9(sass@1.63.6):
